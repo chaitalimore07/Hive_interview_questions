@@ -1,0 +1,642 @@
+     Hive interview Questions
+
+
+ 1. What is the definition of Hive? What is the present version of Hive?
+ Ans: Hive is an open-source data warehouse system. We can use Hive for analyzing and querying large datasets. It's similar to SQL.
+      The present version of Hive is 0.13
+......................................................................................................................................
+
+ 2. Is Hive suitable to be used for OLTP systems? Why?
+ Ans:No Hive does not provide insert and update at row level. So it is not suitable for OLTP system.
+
+..........................................................................................................................................
+
+ 3. How is HIVE different from RDBMS? Does hive support ACID
+ transactions. If not then give the proper reason.
+ Ans:Relational databases, or RDBMS, is a database that stores data in a structured format with rows and columns,
+     a structured form called “tables.” Hive, on the other hand, is a data warehousing system that offers data analysis and queries.
+     Hive supports ACID transactions on tables that store ORC file format.
+
+..............................................................................................................................................
+
+ 4. Explain the hive architecture and the different components of a Hive
+ architecture?
+ ANS:There are several components of Hive Architecture. Such as –
+
+    > User Interface – Basically, it calls the execute interface to the driver. Further, driver creates a session handle to the query. 
+     Then sends the query to the compiler to generate an execution plan for it.
+    > Metastore – It is used to Send the metadata to the compiler. Basically, for the execution of the query on receiving the send MetaData request.
+    > Compiler- It generates the execution plan. Especially, that is a DAG of stages where each stage is either a metadata operation, 
+      a map or reduce job or an operation on HDFS.
+    > Execute Engine- Basically,  by managing the dependencies for submitting each of these stages to the relevant components we use Execute engine.
+    
+     The major components of Apache Hive are:
+
+      > Hive Client
+      > Hive Services
+      > Processing and Resource Management
+      > Distributed Storage 
+............................................................................................................................................
+5. Mention what Hive query processor does? And Mention what are the
+components of a Hive query processor? 
+ ANs:Hive query processor convert graph of MapReduce jobs with the execution time framework. So that the jobs can be executed in the order
+     of dependencies.
+     The main components of Apache Hive Query Processor are as follows:
+
+    > Parse and SemanticAnalysis (ql/parse)
+    > Optimizer (ql/optimizer)
+    > Plan Components (ql/plan)
+    > MetaData Layer (ql/metadata)
+    > Map/Reduce Execution Engine (ql/exec)
+    > Sessions (ql/session)
+    > Type interfaces (ql/typeinfo)
+    > Hive Function Framework (ql/udf)
+    > Tools (ql/tools)
+.............................................................................................................................................
+ 6. What are the three different modes in which we can operate Hive?
+ Ans: Hadoop Mainly works on 3 different Modes:
+
+      * Standalone Mode
+      * Pseudo-distributed Mode
+      * Fully-Distributed Mode
+
+...........................................................................................................................................
+
+ 7. Features and Limitations of Hive.
+ Ans:Features of Hive:
+    * Hive is fast and scalable.
+    * It provides SQL-like queries (i.e., HQL) that are implicitly transformed to MapReduce or Spark jobs.
+    * It is capable of analyzing large datasets stored in HDFS.
+    * It allows different storage types such as plain text, RCFile, and HBase.
+    * It uses indexing to accelerate queries.
+
+   Limitations of Hive:
+   * Hive doesn't support OLTP. Hive supports Online Analytical Processing (OLAP), but not Online Transaction Processing (OLTP).
+   * It doesn't support subqueries.
+   * It has a high latency.
+   * Hive tables don't support delete or update operations.
+
+...............................................................................................................................................
+ 8. How to create a Database in HIVE?
+ Ans:In Hive, CREATE DATABASE statement is used to create a Database, this takes an optional clause IF NOT EXISTS,
+     using this option, it creates only when database not already exists.
+     ==>  CREATE DATABASE [IF NOT EXISTS] <database_name>
+
+..............................................................................................................................................
+ 9. How to create a table in HIVE?
+ Ans:By using CREATE TABLE statement you can create a table in Hive.
+     Example: 
+      CREATE TABLE IF NOT EXISTS emp.employee (
+      id int,
+      name string,
+      age int,
+      gender string )
+      COMMENT 'Employee Table'
+      ROW FORMAT DELIMITED
+      FIELDS TERMINATED BY ',';
+
+............................................................................................................................................
+
+ 10.What do you mean by describe and describe extended and describe
+ formatted with respect to database and table
+ Ans: describe extended - This will show table columns, data types, and other details of the table.
+      Other details will be displayed in single line.
+      describe formatted - This will show table columns, data types, 
+      and other details of the table. Other details will be displayed into multiple lines.
+
+................................................................................................................................................
+ 11.How to skip header rows from a table in Hive?
+ Ans: TBLPROPERTIES("skip.header.line.count"="1"); By using this command we can skip header rows from a table in hive.
+
+...............................................................................................................................................
+ 12.What is a hive operator? What are the different types of hive operators?
+ Ans:Apache Hive provides various Built-in operators for data operations to be implemented on the tables present inside Apache Hive warehouse.
+     Hive operators are used for mathematical operations on operands. It returns specific value as per the logic applied.
+     Types of Hive Built-in Operators:
+     * Relational Operators
+     * Arithmetic Operators
+     * Logical Operators
+     * String Operators
+     * Operators on Complex Types
+
+..............................................................................................................................................
+ 13.Explain about the Hive Built-In Functions
+ Ans: Functions in Hive are categorized as below.
+
+  > Mathematical Functions: These functions mainly used to perform mathematical calculations.
+  > Date Functions: These functions are used to perform operations on date data types like adding the number of days to the date etc.
+  > String Functions: These functions are used to perform operations on strings like finding the length of a string etc.
+  > Conditional Functions: These functions are used to test conditions and returns a value based on whether the test condition is true or false.
+  > Collection Functions: These functions are used to find the size of the complex types like array and map. The only collection function is SIZE.
+    The SIZE function is used to find the number of elements in an array and map. 
+
+
+..............................................................................................................................................
+ 14. Write hive DDL and DML commands.
+ Ans: Hive DML (Data Manipulation Language) commands are used to insert, update, retrieve, 
+      and delete data from the Hive table once the table and database schema has been defined using Hive DDL commands.
+      The various Hive DML commands are:
+
+       * LOAD
+       * SELECT
+       * INSERT
+       * DELETE
+       * UPDATE
+       * EXPORT
+       * IMPORT
+  DDL commands are used to create databases, tables, modify the structure of the table, and drop the database and tables e.t.c.
+  For Ex: Create Database
+          > show Database
+          > use Database
+          > drop Database
+
+..............................................................................................................................................
+ 15.Explain about SORT BY, ORDER BY, DISTRIBUTE BY and
+    CLUSTER BY in Hive.
+ Ans: 1.SORT BY:
+    The SORT by clause sorts the data per reducer. As a result, if we have N number of reducers, we will have N number 
+    of sorted files in the output. These files can have overlapping data ranges. 
+ 
+    2.ORDER BY:
+     ORDER BY clause orders the data globally. Because it ensures the global ordering of the data, all the data need to be passed from a 
+     single reducer only. As a result, the order by clause outputs one single file only. Bringing all the data on one single reducer can become 
+     a performance killer, especially if our output dataset is significantly large.
+
+    3.DISTRIBUTE BY:
+     DISTRIBUTE BY clause is used to distribute the input rows among reducers. It ensures that all rows for the same key columns are going to 
+     the same reducer. So, if we need to partition the data on some key column, we can use the DISTRIBUTE BY clause in the hive queries. 
+
+    4. CLUSTER BY:
+     CLUSTER BY clause is a combination of DISTRIBUTE BY and SORT BY clauses together. That means the output of the CLUSTER BY clause is
+     equivalent to the output of DISTRIBUTE BY + SORT BY clauses. The CLUSTER BY clause distributes the data based on the key column and 
+     then sorts the output data by putting the same key column values adjacent to each other. So, the output of the CLUSTER BY clause is 
+     sorted at the reducer level.
+................................................................................................................................................
+
+ 16.Difference between "Internal Table" and "External Table" and Mention
+ when to choose “Internal Table” and “External Table” in Hive?
+ ANS:  Hive Managed Tables-
+     It is also known an internal table. When we create a table in Hive, it by default manages the data.  
+     This means that Hive moves the data into its warehouse directory.
+     Usage:
+
+     We want Hive to completely manage the lifecycle of the data and table.
+     Data is temporary
+     Hive External Tables-
+     We can also create an external table. It tells Hive to refer to the data that is at an existing location outside the warehouse directory.
+     Usage:
+
+     Data is used outside of Hive. For example, the data files are read and processed by an existing program that does not lock the files.
+     We are not creating a table based on the existing table.
+     In Hive you can choose internal table,
+
+     If the processing data available in local file system
+     If we want Hive to manage the complete lifecycle of data including the deletion
+     You can choose External table,
+ 
+     If processing data available in HDFS
+     Useful when the files are being used outside of Hive
+...........................................................................................................................................
+ 17.Where does the data of a Hive table get stored?
+ ANs:In an HDFS directory – /user/hive/warehouse, the Hive table is stored, by default only.
+     Moreover, by specifying the desired directory in hive.metastore.warehouse.dir configuration parameter
+     present in the hive-site.xml, one can change it. 
+
+...............................................................................................................................................
+
+ 18.Is it possible to change the default location of a managed table?
+ ANs:Yes, by using the clause – LOCATION ‘<hdfs_path>’ we can change the default location of a managed table.
+
+..............................................................................................................................................
+ 19.What is a metastore in Hive? What is the default database provided by
+ Apache Hive for metastore?
+ Ans:Basically, to store the metadata information in the Hive we use Metastore. Though, it is possible by using RDBMS
+     and an open source ORM (Object Relational Model) layer called Data Nucleus. That converts the object representation
+     into the relational schema and vice versa.
+     It offers an embedded Derby database instance backed by the local disk for the metastore, by default.
+     It is what we call embedded metastore configuration.
+..............................................................................................................................................
+ 20.Why does Hive not store metadata information in HDFS?
+ ANs:Using RDBMS instead of HDFS, Hive stores metadata information in the metastore. Basically, to achieve low latency we use RDBMS.
+     Because HDFS read/write operations are time-consuming processes.
+
+................................................................................................................................................
+ 21.What is a partition in Hive? And Why do we perform partitioning in
+ Hive?
+ Ans:Basically, for the purpose of grouping similar type of data together on the basis of column or partition key, 
+     Hive organizes tables into partitions.
+     Moreover, to identify a particular partition each table can have one or more partition keys. On defining Hive Partition,
+     in other words, it is a sub-directory in the table directory.
+      In a Hive table, Partitioning provides granularity. Hence, by scanning only relevant partitioned data instead of 
+     the whole dataset it reduces the query latency.
+
+..................................................................................................................................................
+
+ 22.What is the difference between dynamic partitioning and static
+ partitioning?
+ ANs: Dynamic partitioning values for partition columns are known in the runtime. 
+      In other words, it is known during loading of the data into a Hive table.
+      In static or manual partitioning, it is required to pass the values of partitioned columns manually 
+      while loading the data into the table. Hence, the data file doesn't contain the partitioned columns.
+
+..............................................................................................................................................
+
+ 23.How do you check if a particular partition exists?
+ Ans: Basically, with the following query, we can check whether a particular partition exists or not
+      SHOW PARTITIONS table_name PARTITION(partitioned_column=’partition_value’)
+.................................................................................................................................................
+ 24.How can you stop a partition form being queried?
+ Ans:  By using the ENABLE OFFLINE clause with ALTER TABLE atatement.
+
+..................................................................................................................................................
+ 25.Why do we need buckets? How Hive distributes the rows into buckets?
+ ANs: Basically, for performing bucketing to a partition there are two main reasons:
+
+     A map side join requires the data belonging to a unique join key to be present in the same partition.
+     It allows us to decrease the query time. Also, makes the sampling process more efficient.   
+
+     By using the formula: hash_function (bucketing_column) modulo (num_of_buckets) Hive determines the bucket number for a row.
+     Basically, hash_function depends on the column data type. Although, hash_function for integer data type will be:
+     hash_function (int_type_column)= value of int_type_column   
+
+....................................................................................................................................................
+ 26.In Hive, how can you enable buckets?
+ Ans: In Hive,buckets are enable using following command:
+      set.hive.enforce.bucketing=true;
+
+.....................................................................................................................................................
+ 27.How does bucketing help in the faster execution of queries?
+ Ans:With bucketing in Hive, you can decompose a table data set into smaller parts, making them easier to handle. Bucketing allows
+     you to group similar data types and write them to one single file, which enhances your performance while joining tables or reading data.
+
+...................................................................................................................................................
+ 28.How to optimise Hive Performance? Explain in very detail.
+ Ans:a. Tez-Execution Engine in Hive:
+     Tez Execution Engine – Hive Optimization Techniques, to increase the Hive performance of our hive query by using our execution engine as Tez.
+     On defining Tez, it is a new application framework built on Hadoop Yarn.
+
+     That executes complex-directed acyclic graphs of general data processing tasks. However, we can consider it to be a much more flexible and
+     powerful successor to the map-reduce framework.
+
+    b. Usage of Suitable File Format in Hive:
+       ORCFILE File Formate – Hive Optimization Techniques, if we use appropriate file format on the basis of data. It will drastically increase 
+       our query performance.
+      Basically, for increasing your query performance ORC file format is best suitable. Here, ORC refers to Optimized Row Columnar. 
+      That implies we can store data in an optimized way than the other file formats.
+ 
+    c. Hive Partitioning 
+       Hive Partition – Hive Optimization Techniques, Hive reads all the data in the directory Without partitioning. Further, it applies the
+       query filters on it.  Since all data has to be read this is a slow as well as expensive.
+
+    d.Bucketing in Hive:
+       Hive offers Bucketing concept. Basically,  that allows the user to divide table data sets into more manageable parts.
+       Hence, to maintain parts that are more manageable we can use Bucketing. Through it, the user can set the size of the manageable parts 
+       or Buckets too.
+
+    e.Hive Indexing 
+      Hive Index – Hive Optimization Techniques, one of the best ways is Indexing. To increase your query performance indexing will definitely help.
+
+.....................................................................................................................................................
+ 29. What is the use of Hcatalog?
+ Ans: Basically, to share data structures with external systems we use Hcatalog. It offers access to hive 
+      metastore to users of other tools on Hadoop. Hence, they can read and write data to hive’s data warehouse.
+..................................................................................................................................................
+ 30. Explain about the different types of join in Hive.
+ ANs: There are  4 different types of joins in HiveQL –
+
+      JOIN-  It is very similar to Outer Join in SQL
+      FULL OUTER JOIN – This join Combines the records of both the left and right outer tables. Basically, that fulfill the join condition.
+      LEFT OUTER JOIN- Through this Join, All the rows from the left table are returned even if there are no matches in the right table.
+      RIGHT OUTER JOIN – Here also, all the rows from the right table are returned even if there are no matches in the left table.   
+
+......................................................................................................................................................
+ 31.Is it possible to create a Cartesian join between 2 tables, using Hive?
+ Ans:No. As this kind of Join can not be implemented in mapreduce.
+....................................................................................................................................................
+ 32.Explain the SMB Join in Hive?
+ Ans:In SMB join in Hive, each mapper reads a bucket from the first table and the corresponding bucket from the second table and then a merge
+     sort join is performed. Sort Merge Bucket (SMB) join in hive is mainly used as there is no limit on file or partition or table join. 
+     SMB join can best be used when the tables are large. In SMB join the columns are bucketed and sorted using the join columns. 
+     All tables should have the same number of buckets in SMB join.
+
+.................................................................................................................................................
+ 33.What is the difference between order by and sort by which one we should
+ use?
+ Ans: Despite ORDER BY we should use SORT BY. Especially while we have to sort huge datasets.
+      The reason is SORT BY clause sorts the data using multiple reducers. ORDER BY sorts all of the data together using a single reducer.
+
+      Hence, using ORDER BY will take a lot of time to execute a large number of inputs.
+..............................................................................................................................................
+
+  34.What is the usefulness of the DISTRIBUTED BY clause in Hive?
+  Ans: It controls ho wthe map output is reduced among the reducers. It is useful in case of streaming data
+.....................................................................................................................................................
+
+ 35.How does data transfer happen from HDFS to Hive?
+ Ans:Basically, the user need not LOAD DATA that moves the files to the /user/hive/warehouse/.
+     But only if data is already present in HDFS. Hence, using the keyword external that creates the table definition in the hive metastore 
+     the user just has to define the table.
+     Create external table table_name (
+              id int,
+              myfields string
+    )
+    location ‘/my/location/in/hdfs’;
+
+.............................................................................................................................................
+ 36.Wherever (Different Directory) I run the hive query, it creates a new
+  metastore_db, please explain the reason for it?
+ ANs: Basically, it creates the local metastore, while we run the hive in embedded mode. Also,
+     it looks whether metastore already exist or not before creating the metastore. Hence, in configuration 
+     file hive-site.xml. Property is “javax.jdo.option.ConnectionURL” with default value
+     “jdbc:derby:;databaseName=metastore_db;create=true” this property is defined. Hence, 
+     to change the behavior change the location to the absolute path, thus metastore will be used from that location.
+................................................................................................................................................
+ 37.What will happen in case you have not issued the command: ‘SET
+ hive.enforce.bucketing=true;’ before bucketing a table in Hive?
+ Ans:If we set the property "SET HIVE.enforce.bucketing=true;" then Hive knows to create the number of buckets declared in the
+     table definition to populate the bucketed table.
+     The command set hive.enforce.bucketing = true; allows the correct number of reducers and the cluster by column to be
+     automatically selected based on the table.
+.....................................................................................................................................................
+ 38.Can a table be renamed in Hive?
+ Ans:You can rename the table name in the hive. You need to use the alter command. This command allows you to change the
+     table name as shown below.
+
+     $ ALTER TABLE name RENAME TO new_name
+
+....................................................................................................................................................
+ 39.Write a query to insert a new column(new_col INT) into a hive table at a
+ position before an existing column (x_col)
+ Ans: ALTER TABLE table_name
+
+      CHANGE COLUMN new_col  INT
+ 
+      BEFORE x_col
+..................................................................................................................................................
+40.What is serde operation in HIVE?
+ Ans: Basically, for Serializer/Deserializer, SerDe is an acronym. However, for the purpose of IO,
+     Hive uses the Hive SerDe interface.
+     Hence, it handles both serialization and deserialization in Hive. Also, interprets the results of serialization
+     as individual fields for processing.
+
+..................................................................................................................................................
+ 41.Explain how Hive Deserializes and serialises the data?
+ Ans:Usually, while read/write the data, the user first communicate with inputformat. Then it connects with Record reader
+     to read/write record.  To serialize the data, the data goes to row. Here deserialized custom serde use object inspector
+     to deserialize the data in fields.
+
+......................................................................................................................................................
+
+42.Write the name of the built-in serde in hive.
+ Ans:The built in function in Hive are:
+     1.Collection Functions
+     2. Hive Date Functions
+     3. Mathematical Functions
+     4. Conditional Functions
+     5. Hive string Functions
+
+...................................................................................................................................................
+ 43.What is the need of custom Serde?
+ Ans:A SerDe allows Hive to read in data from a table, and write it back out to HDFS in any custom format.
+....................................................................................................................................................
+ 44.Can you write the name of a complex data type(collection data types) in
+ Hive?
+ Ans: Similar to Spark, Hive also support complex data types which includes Array, Map, Struct and union.
+....................................................................................................................................................
+ 45.Can hive queries be executed from script files? How?
+ Ans: It is possible by using the source command.
+      For example −
+      Hive> source /path/to/file/file_with_query.hql
+
+.........................................................................................................................
+ 46.What are the default record and field delimiter used for hive text files?
+ Ans:Field delimiters separate data fields. Record delimiters separate groups of fields.
+    The default record delimiter is − \n And the filed delimiters are − \001,\002,\003
+
+.................................................................................................................................................
+ 47.How do you list all databases in Hive whose name starts with s?
+ Ans:HOW DATABASES lists all of the databases defined in the metastore. The optional LIKE clause allows the list of databases 
+     to be filtered using a regular expression. Wildcards in the regular expression can only be '' for any character(s) or '|' for a choice. 
+     If you need to search database based on wildcards then we can use below commands
+
+     show databases like '%<DB_NAME>'
+     use your database name in place of <DB_NAME>
+.................................................................................................................................................
+
+ 48.What is the difference between LIKE and RLIKE operators in Hive?
+ Ans: LIKE is an operator similar to LIKE in SQL. We use LIKE to search for string with similar text.
+      RLIKE (Right-Like) is a special function in Hive where if any substring of A matches with B then
+      it evaluates to true. It also obeys Java regular expression pattern.
+
+.................................................................................................................................................
+
+ 49.How to change the column data type in Hive?
+ Ans:By using this command below one can change the column data type: ALTER TABLE table_name CHANGE column_name column_name new_datatype; 
+
+.................................................................................................................................................
+ 50.How will you convert the string ’51.2’ to a float value in the particular
+ column?
+ Ans:The cast() function is used to convert string to float value.
+     Use following command:
+     select cast('51.2' as float);
+.................................................................................................................................................
+ 51.What will be the result when you cast ‘abc’ (string) as INT?
+ Ans: Null
+...............................................................................................................................................
+ 52.What does the following query do?
+ a. INSERT OVERWRITE TABLE employees
+ b. PARTITION (country, state)
+ c. SELECT ..., se.cnty, se.st
+ d. FROM staged_employees se;
+ Ans: It creates partition on table employees with partition values
+      coming from the columns in the select clause. It is called Dynamic partition insert.
+
+.................................................................................................................................................
+ 53.Write a query where you can overwrite data in a new table from the
+ existing table.
+ Ans:INSERT OVERWRITE TABLE
+     <table_name>
+     VALUES (value1,value2,.....,valueN);
+
+..................................................................................................................................................
+
+ 54.What is the maximum size of a string data type supported by Hive?
+ Explain how Hive supports binary formats.
+ Ans:The maximum size of a string data type supported by Hive is 2 GB.
+.................................................................................................................................................
+ 55. What File Formats and Applications Does Hive Support?
+ Ans:   Hive supports the text file format by default, and it also supports 
+       the binary format sequence files, ORC files, Avro data files, and Parquet files.
+       Applications Supported by Hive are:-
+       Log Processing,
+       Text Mining,
+       Document Indexing,
+       Google Analytics,
+       Sentiment analysis,
+       Predictive Modeling,
+       Hypothesis Testing
+................................................................................................................................................
+
+ 56.How do ORC format tables help Hive to enhance its performance?
+ Ans:You can easily store the Hive Data with the ORC (Optimized Row Column) format, which helps to streamline several limitations.
+.................................................................................................................................................
+
+ 57.How can Hive avoid mapreduce while processing the query?
+ Ans:You can make Hive avoid MapReduce to return query results by setting the hive.exec.mode.local.auto property to ‘true’.
+
+..................................................................................................................................................
+ 58.What is view and indexing in hive?
+ Ans:Views are generated based on user requirements. You can save any result set data as a view. 
+     An Index is nothing but a pointer on a particular column of a table. Creating an index means creating 
+     a pointer on a particular column of a table.
+
+.................................................................................................................................................
+ 59.Can the name of a view be the same as the name of a hive table?
+ Ans:No. The name of a view must be unique when compared to all other tables and views present in the same databas
+.................................................................................................................................................
+ 60.What types of costs are associated in creating index on hive tables?
+ Ans:Indexes occupies space and there is a processing cost in arranging the values of the column on which index is cerated.
+................................................................................................................................................
+ 61.Give the command to see the indexes on a table.
+ Ans:SHOW INDEX ON table_name
+....................................................................................................................................................
+ 62. Explain the process to access subdirectories recursively in Hive queries.
+ Ans:By using the below commands, we can access subdirectories recursively in Hive:
+
+     hive> Set mapred.input.dir.recursive=true;
+     hive> Set hive.mapred.supports.subdirectories=true;
+.....................................................................................................................................................
+ 63.If you run a select * query in Hive, why doesn't it run MapReduce?
+ ans:The hive.fetch.task.conversion property of Hive lowers the latency
+     of MapReduce overhead, and in effect when executing queries such as SELECT, FILTER, LIMIT, etc. it skips the MapReduce function
+..................................................................................................................................................
+ 64.What are the uses of Hive Explode?
+ Ans:Hadoop Developers consider an array as their input and convert it into a separate table row. To convert complicated data 
+     types into desired table formats, Hive uses Explode.
+....................................................................................................................................................
+ 65. What is the available mechanism for connecting applications when we
+ run Hive as a server?
+ Ans:Thrift Client: Using Thrift, we can call Hive commands from various programming languages, such as C++, PHP, Java, Python, and Ruby.
+     JDBC Driver: JDBC Driver enables accessing data with JDBC support, by translating calls from an application into SQL and passing the 
+     SQL queries to the Hive engine.
+     ODBC Driver: It implements the ODBC API standard for the Hive DBMS, enabling ODBC-compliant applications to interact seamlessly with Hive.
+
+....................................................................................................................................................
+ 66.Can the default location of a managed table be changed in Hive?
+ Ans:Yes, by using the LOCATION keyword while creating the managed table, we can change 
+     the default location of Managed tables. But the one condition is, the user has to specify the 
+     storage path of the managed table as the value of the LOCATION keyword.
+
+...................................................................................................................................................
+ 67.What is the Hive ObjectInspector function?
+ Ans:To analyze the structure of individual columns and the internal structure of the row objects we use ObjectInspector. 
+     Basically, it provides access to complex objects which can be stored in multiple formats in Hive. 
+
+......................................................................................................................................................
+ 68.What is UDF in Hive?
+ Ans:UDF is a user-designed function created with a Java program to address a specific function that is not 
+     part of the existing Hive functions.
+......................................................................................................................................................
+ 69.Write a query to extract data from hdfs to hive.
+ Ans:Create external table table_name (
+              id int,
+              myfields string
+    )
+    location ‘/my/location/in/hdfs’;
+.....................................................................................................................................................
+ 70.What is TextInputFormat and SequenceFileInputFormat in hive.
+ Ans: TEXTFILE format is a famous input/output format used in Hadoop. In Hive if we define a table as TEXTFILE it
+     can load data of from CSV (Comma Separated Values), delimited by Tabs, Spaces, and JSON data.
+     This means fields in each record should be separated by comma or space or tab or it may be JSON(JavaScript Object Notation) data.
+     By default, if we use TEXTFILE format then each line is considered as a record.
+
+     Sequence files are in the binary format which can be split and the main use of these files is to club two or more smaller
+      files and make them as a one sequence file.
+
+.....................................................................................................................................................
+ 71.How can you prevent a large job from running for a long time in a hive?
+ Ans:This can be achieved by setting the MapReduce jobs to execute in strict mode set hive.
+
+.....................................................................................................................................................
+ 72.When do we use explode in Hive?
+ Ans: This function is used when dealing with complex data types such as arrays and maps.
+     It allows us to flatten the data and make it easier to analyze.
+..................................................................................................................................................
+
+ 73.Can Hive process any type of data formats? Why? Explain in very detail
+ ANS:
+
+...............................................................................................................................................
+ 74.Whenever we run a Hive query, a new metastore_db is created. Why?
+ Ans:Basically, it creates the local metastore, while we run the hive in embedded mode. Also,
+     it looks whether metastore already exist or not before creating the metastore. Hence, in configuration 
+     file hive-site.xml. Property is “javax.jdo.option.ConnectionURL” with default value
+     “jdbc:derby:;databaseName=metastore_db;create=true” this property is defined. Hence, 
+     to change the behavior change the location to the absolute path, thus metastore will be used from that location.
+
+...............................................................................................................................................
+ 75.Can we change the data type of a column in a hive table? Write a
+ complete query.
+ Ans:By using this command below one can change the column data type:
+     ALTER TABLE table_name CHANGE column_name column_name new_datatype;
+
+...............................................................................................................................................
+ 76.While loading data into a hive table using the LOAD DATA clause, how
+ do you specify it is a hdfs file and not a local file ?
+ ANs:if we do not use local keyword ,it assumes it as a HDFS Path.
+
+     Load data  inpath '/data/empnew.csv' into table emp
+
+................................................................................................................................................
+
+ 77.What is the precedence order in Hive configuration?
+ Ans:In Hive we can use following precedence order to set the configurable properties.
+
+    > Hive SET command has the highest priority
+    > -hiveconf option from Hive Command Line
+    > hive-site.xml file
+    > hive-default.xml file
+    > hadoop-site.xml file
+    > hadoop-default.xml file
+
+................................................................................................................................................
+
+ 78.Which interface is used for accessing the Hive metastore?
+ Ans:WebHCat API web interface can be used for Hive commands.
+
+..................................................................................................................................................
+ 79.Is it possible to compress json in the Hive external table ?
+ Ans:Yes
+.....................................................................................................................................................
+ 80.What is the difference between local and remote metastores?
+ Ans:Local Metastore:
+     It is the metastore service runs in the same JVM in which the Hive service is running and connects to a 
+     database running in a separate JVM. Either on the same machine or on a remote machine.
+
+     Remote Metastore:
+    In this configuration, the metastore service runs on its own separate JVM and not in the Hive service JVM.
+
+
+......................................................................................................................................................
+ 81.What is the purpose of archiving tables in Hive?
+ Ans: Hive has built in functions to convert Hive table partition into Hadoop Archive (HAR). 
+     HAR does not compress the files, it is analogous to the Linux tar command.
+     The purpose is to reduce the number of hdfs files in the Hive table partition. 
+...................................................................................................................................................
+
+ 82.What is DBPROPERTY in Hive?
+ Ans:The DB properties are nothing but mentioning the details about the database created by the user.
+     Suppose the name of the user, the type of the database and the tables it has, the date on which the database is created etc.
+     This makes the other user easy the recognize the database and use it according to the requirement.
+
+.....................................................................................................................................................
+ 83.Differentiate between local mode and MapReduce mode in Hive.
+ Ans:Both MapReduce mode and local mode seem same to the user but the difference is the way they execute.
+
+     MapReduce mode:
+     In MapReduce mode, Pig script is executed on Hadoop cluster. The Pig scripts are converted into MapReduce jobs and 
+     then executed on Hadoop cluster (hdfs)
+     Local mode: 
+     In this mode, Pig script runs on a Single machine without the need of Hadoop cluster or hdfs.
+     Local mode is used for development purpose to see how the script would behave in an actual environment. 
+
